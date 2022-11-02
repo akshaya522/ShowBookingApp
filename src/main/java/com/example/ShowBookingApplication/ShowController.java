@@ -31,5 +31,11 @@ public class ShowController {
     public List<Show> getAll(){
         return showRepository.findAll();
     }
+
+    @GetMapping("/getSeats")
+    public List<String> getSeats(){
+        Show show = showRepository.findById(1L).get();
+        return show.getAllSeats(show.getNumOfRows(), show.getNumOfSeatsPerRow());
+    }
     
 }
