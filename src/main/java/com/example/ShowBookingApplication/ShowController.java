@@ -19,7 +19,7 @@ import java.util.List;
 public class ShowController {
 
     private final Logger log = LoggerFactory.getLogger(ShowController.class);
-
+    private final BookTicketService bookTicketService;
 
     @Autowired
     private ShowRepository showRepository;
@@ -27,10 +27,12 @@ public class ShowController {
     @Autowired 
     private BuyerRepository buyerRepository;
 
-    @RequestMapping("/hello")
-    public String hello() {
-        return "Hello World!";
+    public ShowController(
+        BookTicketService bookTicketService
+    ){
+        this.bookTicketService = bookTicketService;
     }
+
 
     @PostMapping("/saveShow")
     public String saveShow(@RequestBody Show show) {
@@ -55,6 +57,12 @@ public class ShowController {
         return show.getAllSeats(show.getNumOfRows(), show.getNumOfSeatsPerRow());
     }
 
+    @GetMapping("/getAvailSeats/{showId}")
+    public List<String> getAvailSeats(@PathVariable Integer showId) {
+        Long id = showId.longValue();
+        return bookTicketService.getShowAvailableSeats(id);
+    }
+
     @PostMapping("/bookTicket")
     public String bookTicket(@RequestBody BuyerDTO buyer) {
         String seatList = buyer.getSeatNumberList();
@@ -74,6 +82,4 @@ public class ShowController {
         buyerRepository.saveAll(buyerList);
         return "Buyer saved...";
     }
-
-    
 }
