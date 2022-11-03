@@ -1,25 +1,11 @@
 package com.example.ShowBookingApplication;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Buyer {
-
-    @Id
-    @GeneratedValue
+public class BuyerDTO {
     private Long ticketId; 
     private Long showId;
     private Integer buyerPhoneNumber;
-    private String seatNumber;
+    private Integer seatNumber;
+    private String seatNumberList;
 
     public Long getTicketId() {
         return ticketId;
@@ -45,11 +31,19 @@ public class Buyer {
         this.buyerPhoneNumber = buyerPhoneNumber;
     }
 
-    public String getSeatNumber() {
+    public Integer getSeatNumber() {
         return seatNumber;
     }
 
-    public void setSeatNumber(String seatNumber) {
+    public void setSeatNumber(Integer seatNumber) {
         this.seatNumber = seatNumber;
+    }
+
+    public String getSeatNumberList() {
+        return seatNumberList;
+    }
+
+    public void setSeatNumberList(String seatNumberList) {
+        this.seatNumberList = seatNumberList;
     }
 }

@@ -1,41 +1,79 @@
 package com.example.ShowBookingApplication;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
 public class ShowController {
 
+    private final Logger log = LoggerFactory.getLogger(ShowController.class);
+
+
     @Autowired
     private ShowRepository showRepository;
 
+    @Autowired 
+    private BuyerRepository buyerRepository;
+
     @RequestMapping("/hello")
-    public String hello(){
+    public String hello() {
         return "Hello World!";
     }
 
     @PostMapping("/saveShow")
-    public String saveShow(@RequestBody Show show){
+    public String saveShow(@RequestBody Show show) {
         showRepository.save(show);
         return "Show saved...";
     }
 
     @GetMapping("/getAllShows")
-    public List<Show> getAll(){
+    public List<Show> getAllShows() {
         return showRepository.findAll();
     }
 
-    @GetMapping("/getSeats")
-    public List<String> getSeats(){
-        Show show = showRepository.findById(1L).get();
+    @GetMapping("/getAllTickets")
+    public List<Buyer> getAllTickets() {
+        return buyerRepository.findAll();
+    }
+
+    @GetMapping("/getSeats/{showId}")
+    public List<String> getSeats(@PathVariable Integer showId) {
+        Long id = showId.longValue();
+        Show show = showRepository.findById(id).get();
         return show.getAllSeats(show.getNumOfRows(), show.getNumOfSeatsPerRow());
     }
+
+    @PostMapping("/bookTicket")
+    public String bookTicket(@RequestBody BuyerDTO buyer) {
+        String seatList = buyer.getSeatNumberList();
+        List<String> seatNos = Arrays.asList(seatList.split("\\s*,\\s*"));
+        List<Buyer> buyerList = new ArrayList<>();
+
+        seatNos.stream().forEach(
+            seat -> {
+                Buyer buyere = new Buyer();
+                buyere.setSeatNumber(seat);
+                buyere.setBuyerPhoneNumber(buyer.getBuyerPhoneNumber());
+                buyere.setShowId(buyer.getShowId());
+                buyerList.add(buyere);
+            }
+        );
+
+        buyerRepository.saveAll(buyerList);
+        return "Buyer saved...";
+    }
+
     
 }
