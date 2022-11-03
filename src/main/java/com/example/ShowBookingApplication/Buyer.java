@@ -1,5 +1,7 @@
 package com.example.ShowBookingApplication;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,6 +22,7 @@ public class Buyer {
     private Long showId;
     private Integer buyerPhoneNumber;
     private String seatNumber;
+    private LocalDateTime bookingTime;
 
     public Long getTicketId() {
         return ticketId;
@@ -51,5 +54,13 @@ public class Buyer {
 
     public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
+    }
+
+    public LocalDateTime getBookingTime() {
+        return bookingTime;
+    }
+
+    public void setBookingTime(LocalDateTime bookingTime) {
+        this.bookingTime = bookingTime;
     }
 }

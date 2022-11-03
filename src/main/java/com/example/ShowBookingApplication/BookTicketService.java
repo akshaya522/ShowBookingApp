@@ -1,5 +1,6 @@
 package com.example.ShowBookingApplication;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,11 +44,39 @@ public class BookTicketService {
         return availSeats;
     }
 
+    public void cancelBooking(Long ticketNo, Integer phoneNumber) {
+        Buyer ticket = buyerRepository.findByTicketIdAndBuyerPhoneNumber(ticketNo, phoneNumber);
+        Integer cancellationWindow = showRepository.findById(ticket.getShowId()).get().getCancellationWindow();
+        LocalDateTime currTime = LocalDateTime.now();
+        LocalDateTime cancellationTime = ticket.getBookingTime().plusMinutes(cancellationWindow);
+
+        if (currTime.isBefore(cancellationTime)){
+            buyerRepository.delete(ticket);
+        } else {
+            new CannotCancel(ticketNo);
+        }
+
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 409
     class ShowDoesNotExist extends RuntimeException{
-    public ShowDoesNotExist(long showId){
+        /**
+        	 *
+        	 */
+        private static final long serialVersionUID = 1L;
+
+        public ShowDoesNotExist(long showId) {
         super("Show " + showId + " does not exist.");
-    }
-}
-    
+    }}
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST) // 409
+    class CannotCancel extends RuntimeException{
+        /**
+        	 *
+        	 */
+        private static final long serialVersionUID = 1L;
+
+        public CannotCancel(long ticketId) {
+        super("Cannot cancel " + ticketId + " beyond cancellation time.");
+    }}
 }

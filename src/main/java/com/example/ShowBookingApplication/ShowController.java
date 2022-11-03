@@ -3,6 +3,7 @@ package com.example.ShowBookingApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,11 +78,18 @@ public class ShowController {
                 buyere.setSeatNumber(seat);
                 buyere.setBuyerPhoneNumber(buyer.getBuyerPhoneNumber());
                 buyere.setShowId(buyer.getShowId());
+                buyere.setBookingTime(LocalDateTime.now());
                 buyerList.add(buyere);
             }
         );
 
         buyerRepository.saveAll(buyerList);
         return "Buyer saved...";
+    }
+
+    @GetMapping("/cancelBooking/{ticketNo}/{mobileNo}") 
+    public String cancelBooking(@PathVariable Integer ticketNo, @PathVariable Integer mobileNo) {
+        this.bookTicketService.cancelBooking(ticketNo.longValue(), mobileNo);
+        return "Ticket deleted...";
     }
 }
