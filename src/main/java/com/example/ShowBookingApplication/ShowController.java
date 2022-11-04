@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ShowController {
@@ -57,7 +58,7 @@ public class ShowController {
     public List<String> getSeats(@PathVariable Integer showId) {
         Long id = showId.longValue();
         Show show = showRepository.findById(id).get();
-        return show.getAllSeats(show.getNumOfRows(), show.getNumOfSeatsPerRow());
+        return bookTicketService.getAllSeats(show.getNumOfRows(), show.getNumOfSeatsPerRow());
     }
 
     @GetMapping("/getAvailSeats/{showId}")
@@ -83,13 +84,18 @@ public class ShowController {
             }
         );
 
-        buyerRepository.saveAll(buyerList);
-        return "Buyer saved...";
+        List<Buyer> list1 = buyerRepository.saveAll(buyerList);
+        return list1.stream().map(Buyer::getTicketId).collect(Collectors.toList()).toString();
     }
 
     @GetMapping("/cancelBooking/{ticketNo}/{mobileNo}") 
     public String cancelBooking(@PathVariable Integer ticketNo, @PathVariable Integer mobileNo) {
         this.bookTicketService.cancelBooking(ticketNo.longValue(), mobileNo);
         return "Ticket deleted...";
+    }
+
+    @GetMapping("/getShowDetails/{showId}") 
+    public ShowDTO getShowDetails(@PathVariable Integer showId) {
+        return this.bookTicketService.getShowDetails(showId.longValue());
     }
 }

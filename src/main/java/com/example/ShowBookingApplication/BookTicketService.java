@@ -22,6 +22,21 @@ public class BookTicketService {
         this.showRepository = showRepository;
     }
 
+    public List<String> getAllSeats(Integer rows, Integer seatsPerRow) {
+        List<String> res = new ArrayList<>();
+        if(rows > 0 && rows < 27){
+            for(int i = 1; i < rows+1; i++){
+                String rowVal = String.valueOf((char)(i+64));
+                for(int j = 0; j<seatsPerRow; j++){
+                    String seat = rowVal + String.valueOf(j+1);
+                    res.add(seat);
+                }
+            }
+        }
+
+        return res;
+    }
+
     public List<String> getShowAvailableSeats(Long showId) {
         Show show = showRepository.findById(showId).orElseThrow(() -> new ShowDoesNotExist(showId));
         List<Buyer> buyerList = buyerRepository.findByShowId(showId);
@@ -56,6 +71,19 @@ public class BookTicketService {
             new CannotCancel(ticketNo);
         }
 
+    }
+
+    public ShowDTO getShowDetails(Long showId) {
+        Show show = showRepository.findById(showId).orElseThrow(() -> new ShowDoesNotExist(showId));
+        List<Buyer> buyerList = buyerRepository.findByShowId(showId); 
+
+        ShowDTO showDTO = new ShowDTO();
+        showDTO.setShowId(showId);
+        showDTO.setCancellationWindow(show.getCancellationWindow());
+        showDTO.setBuyerDetails(buyerList);
+        showDTO.setAvailSeats(getShowAvailableSeats(showId));
+
+        return showDTO;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 409
