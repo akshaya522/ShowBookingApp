@@ -25,8 +25,13 @@ public class BookTicketService {
         this.bookTicketServiceValidator = bookTicketServiceValidator;
     }
 
-    public String test() {
-        return "yesyjehsks";
+    public String saveshow(Show show){
+        String validator = this.bookTicketServiceValidator.createShowValidator(show);
+        if (validator == null) {
+            Show show1 = this.showRepository.save(show);
+            return "Show successfully setup! ShowId: " + show1.getShowId().toString();
+        }
+        return validator;
     }
 
     public List<String> getAllSeats(Integer rows, Integer seatsPerRow) {

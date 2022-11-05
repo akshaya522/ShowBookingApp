@@ -31,7 +31,7 @@ public class BookTicketServiceValidator {
         } else if (show.getNumOfSeatsPerRow() < 0) {
             return "Number of seats per row cannot be less than zero";
         } else if (show.getNumOfSeatsPerRow() > 10) {
-            return "Number of seats per row cannot be more than 26";
+            return "Number of seats per row cannot be more than 10";
         } else if (show.getCancellationWindow() < 0) {
             return "Cancelletion window minutes cannot be zero";
         } else if (show.getCancellationWindow() > 120) {
