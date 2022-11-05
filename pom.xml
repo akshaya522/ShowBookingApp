@@ -14,7 +14,7 @@
 	<name>ShowBookingApplication</name>
 	<description>ShowBookingApplication project for Spring Boot</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>14</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -56,13 +56,27 @@
 		</dependency>
 	</dependencies>
 
-	<build>
+	<!-- <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+	</build> -->
+
+	<build>
+    	<plugins>
+        	<plugin>
+            	<groupId>org.springframework.boot</groupId>
+            	<artifactId>spring-boot-maven-plugin</artifactId>
+            	<configuration>
+                	<environmentVariables>
+                	<CALLBACK_PORT>${env.callbackport}</CALLBACK_PORT>
+                	</environmentVariables>
+            	</configuration>
+        	</plugin>
+    	</plugins>
 	</build>
 
 </project>

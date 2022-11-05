@@ -25,6 +25,10 @@ public class BookTicketService {
         this.bookTicketServiceValidator = bookTicketServiceValidator;
     }
 
+    public String test() {
+        return "yesyjehsks";
+    }
+
     public List<String> getAllSeats(Integer rows, Integer seatsPerRow) {
         List<String> res = new ArrayList<>();
         if(rows > 0 && rows < 27){
