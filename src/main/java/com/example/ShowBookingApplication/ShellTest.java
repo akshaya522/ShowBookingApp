@@ -67,11 +67,21 @@ public class ShellTest {
         return result;
     }
 
-    // @ShellMethod(value = "Book show", key = "Book")
-    // public String bookShow(Integer a) {
+    @ShellMethod(value = "Book show", key = "Book")
+    public String bookShow(Integer showId, String seats, Integer phoneNo) {
+        BuyerDTO buyer = new BuyerDTO();
+        buyer.setShowId(showId.longValue());
+        buyer.setSeatNumberList(seats);
+        buyer.setBuyerPhoneNumber(phoneNo);
 
-    //     List<String> seats = this.bookTicketService.getShowAvailableSeats(a.longValue());
-    //     String result = "Available seats for showId: " + a + " are " + seats;
-    //     return result;
-    // }
+        String ticketIds = this.bookTicketService.bookTicket(buyer);
+        String result = "Succefully Booked! Ticket Ids Booked: " + ticketIds;
+        return result;
+    }
+
+    @ShellMethod(value = "Cancel booking", key = "Cancel")
+    public String cancelBooking(Integer ticketNo, Integer phoneNo) {
+        String result = this.bookTicketService.cancelBooking(ticketNo.longValue(), phoneNo);
+        return result;
+    }
 }

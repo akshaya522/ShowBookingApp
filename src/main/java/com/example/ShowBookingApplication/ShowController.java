@@ -72,23 +72,7 @@ public class ShowController {
 
     @PostMapping("/bookTicket")
     public String bookTicket(@RequestBody BuyerDTO buyer) {
-        String seatList = buyer.getSeatNumberList();
-        List<String> seatNos = Arrays.asList(seatList.split("\\s*,\\s*"));
-        List<Buyer> buyerList = new ArrayList<>();
-
-        seatNos.stream().forEach(
-            seat -> {
-                Buyer buyere = new Buyer();
-                buyere.setSeatNumber(seat);
-                buyere.setBuyerPhoneNumber(buyer.getBuyerPhoneNumber());
-                buyere.setShowId(buyer.getShowId());
-                buyere.setBookingTime(LocalDateTime.now());
-                buyerList.add(buyere);
-            }
-        );
-
-        List<Buyer> list1 = buyerRepository.saveAll(buyerList);
-        return list1.stream().map(Buyer::getTicketId).collect(Collectors.toList()).toString();
+        return this.bookTicketService.bookTicket(buyer);
     }
 
     @GetMapping("/cancelBooking/{ticketNo}/{mobileNo}") 

@@ -2,6 +2,7 @@ package com.example.ShowBookingApplication;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,7 +72,7 @@ public class BookTicketService {
         return availSeats;
     }
 
-    public void cancelBooking(Long ticketNo, Integer phoneNumber) {
+    public String cancelBooking(Long ticketNo, Integer phoneNumber) {
         Buyer ticket = buyerRepository.findByTicketIdAndBuyerPhoneNumber(ticketNo, phoneNumber);
         Integer cancellationWindow = showRepository.findById(ticket.getShowId()).get().getCancellationWindow();
         LocalDateTime currTime = LocalDateTime.now();
@@ -79,8 +80,9 @@ public class BookTicketService {
 
         if (currTime.isBefore(cancellationTime)){
             buyerRepository.delete(ticket);
+            return "Cancelled";
         } else {
-            // new CannotCancel(ticketNo);
+            return "Cannot cancel pass cancellation window!";
         }
 
     }
@@ -96,5 +98,25 @@ public class BookTicketService {
         showDTO.setAvailSeats(getShowAvailableSeats(showId));
 
         return showDTO;
+    }
+
+    public String bookTicket(BuyerDTO buyer) {
+        String seatList = buyer.getSeatNumberList().trim();
+        List<String> seatNos = Arrays.asList(seatList.split("\\s*,\\s*"));
+        List<Buyer> buyerList = new ArrayList<>();
+
+        seatNos.stream().forEach(
+            seat -> {
+                Buyer buyere = new Buyer();
+                buyere.setSeatNumber(seat);
+                buyere.setBuyerPhoneNumber(buyer.getBuyerPhoneNumber());
+                buyere.setShowId(buyer.getShowId());
+                buyere.setBookingTime(LocalDateTime.now());
+                buyerList.add(buyere);
+            }
+        );
+
+        List<Buyer> list1 = buyerRepository.saveAll(buyerList);
+        return list1.stream().map(Buyer::getTicketId).collect(Collectors.toList()).toString();
     }
 }
