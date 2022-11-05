@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class BookTicketService {
     private final BuyerRepository buyerRepository;
     private final ShowRepository showRepository;
+    private final BookTicketServiceValidator bookTicketServiceValidator;
 
     public BookTicketService(
         BuyerRepository buyerRepository,
-        ShowRepository showRepository
+        ShowRepository showRepository,
+        BookTicketServiceValidator bookTicketServiceValidator
     ){
         this.buyerRepository = buyerRepository;
         this.showRepository = showRepository;
+        this.bookTicketServiceValidator = bookTicketServiceValidator;
     }
 
     public List<String> getAllSeats(Integer rows, Integer seatsPerRow) {
@@ -38,7 +41,7 @@ public class BookTicketService {
     }
 
     public List<String> getShowAvailableSeats(Long showId) {
-        Show show = showRepository.findById(showId).orElseThrow(() -> new ShowDoesNotExist(showId));
+        Show show = showRepository.findById(showId).get();
         List<Buyer> buyerList = buyerRepository.findByShowId(showId);
         List<String> bookedSeats = buyerList.stream().map(Buyer::getSeatNumber).collect(Collectors.toList());
 
@@ -68,13 +71,13 @@ public class BookTicketService {
         if (currTime.isBefore(cancellationTime)){
             buyerRepository.delete(ticket);
         } else {
-            new CannotCancel(ticketNo);
+            // new CannotCancel(ticketNo);
         }
 
     }
 
     public ShowDTO getShowDetails(Long showId) {
-        Show show = showRepository.findById(showId).orElseThrow(() -> new ShowDoesNotExist(showId));
+        Show show = showRepository.findById(showId).get();
         List<Buyer> buyerList = buyerRepository.findByShowId(showId); 
 
         ShowDTO showDTO = new ShowDTO();
@@ -85,26 +88,4 @@ public class BookTicketService {
 
         return showDTO;
     }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // 409
-    class ShowDoesNotExist extends RuntimeException{
-        /**
-        	 *
-        	 */
-        private static final long serialVersionUID = 1L;
-
-        public ShowDoesNotExist(long showId) {
-        super("Show " + showId + " does not exist.");
-    }}
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // 409
-    class CannotCancel extends RuntimeException{
-        /**
-        	 *
-        	 */
-        private static final long serialVersionUID = 1L;
-
-        public CannotCancel(long ticketId) {
-        super("Cannot cancel " + ticketId + " beyond cancellation time.");
-    }}
 }

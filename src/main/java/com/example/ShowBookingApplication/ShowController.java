@@ -24,6 +24,7 @@ public class ShowController {
 
     private final Logger log = LoggerFactory.getLogger(ShowController.class);
     private final BookTicketService bookTicketService;
+    private final BookTicketServiceValidator bookTicketServiceValidator;
 
     @Autowired
     private ShowRepository showRepository;
@@ -32,9 +33,11 @@ public class ShowController {
     private BuyerRepository buyerRepository;
 
     public ShowController(
-        BookTicketService bookTicketService
+        BookTicketService bookTicketService,
+        BookTicketServiceValidator bookTicketServiceValidator
     ){
         this.bookTicketService = bookTicketService;
+        this.bookTicketServiceValidator = bookTicketServiceValidator;
     }
 
 
