@@ -2,8 +2,10 @@ package com.example.ShowBookingApplication;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -41,23 +43,22 @@ public class BookTicketServiceValidator {
         }
     }
 
-    public String bookTicketValidator(BuyerDTO buyerDTO) {
-        Optional<Show> show = this.showRepository.findById(buyerDTO.getShowId());
+    public String bookTicketValidator(BuyerDTO buyerDTO, List<String> availSeats, List<String> bookingSeats) {
         List<Buyer> buyerList = this.buyerRepository.findByBuyerPhoneNumber(buyerDTO.getBuyerPhoneNumber());
-        List<String> seatNumbers = Arrays.asList(buyerDTO.getSeatNumberList().split("\\s*,\\s*"));
+        List<String> invalidSeats = bookingSeats.stream().filter(seat -> !availSeats.contains(seat)).collect(Collectors.toList());
 
-
-        if (!show.isPresent()) {
-            return "Invalid show Id";
-        } else if (seatNumbers.size() == 0) {
-            return "Seat number list cannot be empty";
+        if (bookingSeats.size() == 0) {
+            return "Seat number lists cannot be empty";
         } else if (buyerList.size() == 1) {
             return "There is an existing booking with this number. Only one booking per phone number is allowed";
+        } else if (invalidSeats.size() > 0) {
+            return "There are invalid seat numbers: " + invalidSeats;
+        } else if (buyerDTO.getBuyerPhoneNumber().toString().matches("/^\\+65(6|8|9)\\d{7}$/")) {
+            return "Invalid phone number";
         } else {
             return null;
         }
     }
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 409
     class ShowDoesNotExist extends RuntimeException{

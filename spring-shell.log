@@ -22,3 +22,17 @@
 1667731627047:View 1
 1667731631775:User Admin
 1667731633067:View 1
+1667733586156:Setup --rows 10 --seats 10 --cancellationMins 10
+1667733588751:View 1
+1667733597597:User Buyer
+1667733603853:Availability 1
+1667733640032:Book --showId 1 --seats "A1,B2" --phoneNo 8231
+1667733674490:Cancel --tickNo 2 --phoneNo 12
+1667733694519:Cancel --ticketNo 2 --phoneNo 23
+1667733706384:Cancel --ticketNo 2 --phoneNo 8231
+1667733712877:Availability 1
+1667733718532:User Admin
+1667733724226:View 1
+1667734275447:Cancel --ticketNo 3 --phoneNo 8231
+1667734281812:User Buyer
+1667734283510:Cancel --ticketNo 3 --phoneNo 8231
