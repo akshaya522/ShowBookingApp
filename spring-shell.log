@@ -1,1 +1,24 @@
 1667729218237:sample-table
+1667730696596:user a
+1667730704197:User Admin
+1667730708988:Setup
+1667730886097:Usrmn
+1667731358200:Setup
+1667731371105:Setup --rows 2 --seats 10 --cancellationMins 10
+1667731373902:View 1
+1667731381796:Book
+1667731396428:Book -showId 1 --seats A1,A2 --phoneNO 8231
+1667731407447:Book -showId 1 --seats A1,A2 --phoneNo 8231
+1667731416771:Book -showId 1 --seats "A1,A2"  --phoneNo 8231
+// Spring Shell 1.2.0.RELEASE log opened at 2022-11-06 18:44:10
+1667731498349:Setup --rows 1 --seats 10 --cancellationMins 10
+1667731522631:Book --showId 1 --seats "A1,A2" --phoneNo 8231
+1667731532961:User Buyer
+1667731535006:Book --showId 1 --seats "A1,A2" --phoneNo 8231
+1667731552194:Availability 1
+1667731575278:Cancel --ticketNo 1 --phoneNo 8231
+1667731608745:Cancel --ticketNo 2 --phoneNo 8231
+1667731617795:Availability 1
+1667731627047:View 1
+1667731631775:User Admin
+1667731633067:View 1

@@ -85,11 +85,11 @@ public class BookTicketService {
         if (show.isPresent()) {
             List<Buyer> buyerList = buyerRepository.findByShowId(showId); 
 
-            
 
             String result = "Show Id: " + showId.toString() + "\n" + 
             "Show Cancellation Window Time: " + show.get().getCancellationWindow() +  "\n" + 
-            "Show " + getShowAvailableSeats(showId) + "\n";
+            "Show " + getShowAvailableSeats(showId) + "\n" + 
+            "Buyer lists: " + buyerList;
             return result;
         } else {
             return "Invalid Show Id! Show Id entered: " + showId;

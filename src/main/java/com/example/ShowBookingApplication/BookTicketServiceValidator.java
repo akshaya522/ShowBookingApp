@@ -42,8 +42,7 @@ public class BookTicketServiceValidator {
     }
 
     public String bookTicketValidator(BuyerDTO buyerDTO) {
-        Long showId = buyerDTO.getShowId();
-        Optional<Show> show = this.showRepository.findById(showId);
+        Optional<Show> show = this.showRepository.findById(buyerDTO.getShowId());
         List<Buyer> buyerList = this.buyerRepository.findByBuyerPhoneNumber(buyerDTO.getBuyerPhoneNumber());
         List<String> seatNumbers = Arrays.asList(buyerDTO.getSeatNumberList().split("\\s*,\\s*"));
 

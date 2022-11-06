@@ -2,6 +2,9 @@ package com.example.ShowBookingApplication;
 
 import java.util.List;
 
+import org.jline.terminal.TerminalBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -12,15 +15,12 @@ import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
 
-
 @ShellComponent
 public class ShowShellMethods {
 
     private final BookTicketService bookTicketService;
 
-    public ShowShellMethods (
-        BookTicketService bookTicketService
-    ){
+    public ShowShellMethods(BookTicketService bookTicketService) {
         this.bookTicketService = bookTicketService;
     }
 
@@ -28,7 +28,6 @@ public class ShowShellMethods {
     Boolean isBuyer = false;
     private final String ADMIN = "admin";
     private final String BUYER = "buyer";
-
 
     @ShellMethod(value = "Set User Role", key = "User")
     public String view(@ShellOption() String user) {

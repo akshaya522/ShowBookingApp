@@ -64,11 +64,11 @@ public class ShowController {
         return bookTicketService.getAllSeats(show.getNumOfRows(), show.getNumOfSeatsPerRow());
     }
 
-    @GetMapping("/getAvailSeats/{showId}")
-    public List<String> getAvailSeats(@PathVariable Integer showId) {
-        Long id = showId.longValue();
-        return bookTicketService.getShowAvailableSeats(id);
-    }
+    // @GetMapping("/getAvailSeats/{showId}")
+    // public List<String> getAvailSeats(@PathVariable Integer showId) {
+    //     Long id = showId.longValue();
+    //     return bookTicketService.getShowAvailableSeats(id);
+    // }
 
     @PostMapping("/bookTicket")
     public String bookTicket(@RequestBody BuyerDTO buyer) {
@@ -81,8 +81,8 @@ public class ShowController {
         return "Ticket deleted...";
     }
 
-    @GetMapping("/getShowDetails/{showId}") 
-    public ShowDTO getShowDetails(@PathVariable Integer showId) {
-        return this.bookTicketService.getShowDetails(showId.longValue());
-    }
+    // @GetMapping("/getShowDetails/{showId}") 
+    // public ShowDTO getShowDetails(@PathVariable Integer showId) {
+    //     return this.bookTicketService.getShowDetails(showId.longValue());
+    // }
 }
