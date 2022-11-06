@@ -26,11 +26,9 @@ public class BookTicketServiceValidator {
 
 
     public String createShowValidator(Show show) {
-        System.out.println(show.getNumOfRows());
         if (show.getNumOfRows() < 1) {
             return "Number of rows in show cannot be less than one!";
         } else if (show.getNumOfRows() > 26) {
-            System.out.println("in here");
             return "Number of rows in show cannot be more than 26!";
         } else if (show.getNumOfSeatsPerRow() < 1) {
             return "Number of seats per row cannot be less than one!";

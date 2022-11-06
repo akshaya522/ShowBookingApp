@@ -52,3 +52,5 @@
 1667759667008:Setup --rows 90 --seats 8 --cancellationMins 10
 1667759716378:e ami
 1667759721601:Usrdn sri
+1667762653505:Setup
+1667762666502:Setup --rows 3 --seats 19 --cancellationMins 10

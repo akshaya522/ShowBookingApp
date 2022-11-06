@@ -1,6 +1,7 @@
 package com.example.ShowBookingApplication;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -100,6 +101,25 @@ public class BookTicketServiceTest {
     }
 
 
+    // @Test 
+    // public void bookTicket_withinCancellation_shouldThrowException() {
+    //     BuyerDTO mockBuyerDTO = getMockBuyerDTO();
+    //     Buyer mockBuyer = getMockBuyer();
+    //     Show mockShow = getMockShow(false, false, false);
+
+    //     List<Buyer> list = new ArrayList<>();
+    //     list.add(mockBuyer);
+    //     list.add(mockBuyer);
+        
+    //     Mockito.doReturn(Optional.of(mockShow)).when(this.showRepository).findById(mockBuyer.getShowId());
+    //     Mockito.when(buyerRepository.saveAll(Mockito.any(List.class))
+    //             .thenReturn(list));
+    //     String res = this.bookTicketService.cancelBooking(mockBuyer.getTicketId(), mockBuyer.getBuyerPhoneNumber());
+
+    //     Assertions.assertEquals("Ticket 1 cancelled succesfully", res);
+    // }
+
+
 
     private Show getMockShow(Boolean invalidRows, Boolean invalidSeats, Boolean invalidCancellation) {
         Show show = new Show();
@@ -115,7 +135,16 @@ public class BookTicketServiceTest {
         buyer.setBookingTime(LocalDateTime.now());
         buyer.setBuyerPhoneNumber(8231);
         buyer.setSeatNumber("A1");
-        buyer.setTicketId(1l);
+        buyer.setTicketId(1L);
+        buyer.setShowId(200L);
+        return buyer;
+    }
+
+    private BuyerDTO getMockBuyerDTO() {
+        BuyerDTO buyer = new BuyerDTO();
+        buyer.setBuyerPhoneNumber(8231);
+        buyer.setSeatNumberList("A1, A2");
+        buyer.setTicketId(1L);
         buyer.setShowId(200L);
         return buyer;
     }
