@@ -6,10 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.apache.commons.lang3.StringUtils;
 
 @Service
 public class BookTicketService {
@@ -93,14 +91,20 @@ public class BookTicketService {
 
     public String getShowDetails(Long showId) {
         Optional<Show> show = showRepository.findById(showId);
-        if (show.isPresent()) {
-            List<Buyer> buyerList = buyerRepository.findByShowId(showId); 
 
+        if (show.isPresent()) {
+            List<Buyer> buyerList = buyerRepository.findByShowId(showId);
+            buyerList.sort((e1, e2) -> e1.getSeatNumber().compareTo(e2.getSeatNumber())); 
+            List<String> buyerStrData = new ArrayList<>();
+        
+            buyerList.forEach(i -> {
+                buyerStrData.add("Ticket#: " + i.getTicketId() + ", Buyer Phone Number: " + i.getBuyerPhoneNumber() + ", Seats allocated: " + i.getSeatNumber());
+            });
 
             String result = "Show Id: " + showId.toString() + "\n" + 
             "Show Cancellation Window Time: " + show.get().getCancellationWindow() +  "\n" + 
             "Show " + getShowAvailableSeats(showId) + "\n" + 
-            "Buyer lists: " + buyerList;
+            "Buyer list: " + "\n" + StringUtils.join(buyerStrData, "\n");;
             return result;
         } else {
             return "Invalid Show Id! Show Id entered: " + showId;
@@ -121,7 +125,7 @@ public class BookTicketService {
                 seatNos.stream().forEach(
                     seat -> {
                         Buyer buyere = new Buyer();
-                        buyere.setSeatNumber(seat);
+                        buyere.setSeatNumber(seat.toUpperCase());
                         buyere.setBuyerPhoneNumber(buyer.getBuyerPhoneNumber());
                         buyere.setShowId(buyer.getShowId());
                         buyere.setBookingTime(LocalDateTime.now());
@@ -130,7 +134,7 @@ public class BookTicketService {
                 );
 
                 List<Buyer> list1 = buyerRepository.saveAll(buyerList);
-                return list1.stream().map(Buyer::getTicketId).collect(Collectors.toList()).toString();
+                return "Success! Tickets booked: " + list1.stream().map(Buyer::getTicketId).collect(Collectors.toList()).toString();
             } else {
                 return validator;
             }

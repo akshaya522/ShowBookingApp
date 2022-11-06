@@ -14,6 +14,7 @@ import org.springframework.shell.table.ArrayTableModel;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
+import org.jline.terminal.Terminal;
 
 @ShellComponent
 public class ShowShellMethods {

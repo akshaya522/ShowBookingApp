@@ -40,3 +40,12 @@
 1667734410471:Book --showId 1 --seats "A1,A2" --phoneNo 8231
 1667734433672:User Admin
 1667734435073:View 1
+1667743065113:User Admin
+1667743295062:User test
+1667744798845:Setup --rows 2 --seats 10 --cancellationMins 10
+1667744805295:View 1
+1667744819336:User Buyer
+1667744824061:Availability 1
+1667744846623:Book --showId 1 --seats "A1,B10" --phoneNo 8231
+1667744893195:User Admin
+1667744896700:View 1
