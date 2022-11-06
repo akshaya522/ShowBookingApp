@@ -6,11 +6,11 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 @ShellComponent
-public class ShellTest {
+public class ShowShellMethods {
 
     private final BookTicketService bookTicketService;
 
-    public ShellTest(
+    public ShowShellMethods (
         BookTicketService bookTicketService
     ){
         this.bookTicketService = bookTicketService;
@@ -75,7 +75,7 @@ public class ShellTest {
         buyer.setBuyerPhoneNumber(phoneNo);
 
         String ticketIds = this.bookTicketService.bookTicket(buyer);
-        String result = "Succefully Booked! Ticket Ids Booked: " + ticketIds;
+        String result = "Succesfully Booked! Ticket Ids Booked: " + ticketIds;
         return result;
     }
 

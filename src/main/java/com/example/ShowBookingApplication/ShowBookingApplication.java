@@ -18,10 +18,7 @@ public class ShowBookingApplication implements CommandLineRunner {
 
 		SpringApplication.run(ShowBookingApplication.class, args);
 			Bootstrap.main(args);
-
-		if(args[0].equals("View")){
-			// testfun("View");
-		}
+			
 	}
 
 	@Override 
