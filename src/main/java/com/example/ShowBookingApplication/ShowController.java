@@ -12,12 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ShowController {
@@ -64,12 +59,6 @@ public class ShowController {
         return bookTicketService.getAllSeats(show.getNumOfRows(), show.getNumOfSeatsPerRow());
     }
 
-    // @GetMapping("/getAvailSeats/{showId}")
-    // public List<String> getAvailSeats(@PathVariable Integer showId) {
-    //     Long id = showId.longValue();
-    //     return bookTicketService.getShowAvailableSeats(id);
-    // }
-
     @PostMapping("/bookTicket")
     public String bookTicket(@RequestBody BuyerDTO buyer) {
         return this.bookTicketService.bookTicket(buyer);
@@ -80,9 +69,4 @@ public class ShowController {
         this.bookTicketService.cancelBooking(ticketNo.longValue(), mobileNo);
         return "Ticket deleted...";
     }
-
-    // @GetMapping("/getShowDetails/{showId}") 
-    // public ShowDTO getShowDetails(@PathVariable Integer showId) {
-    //     return this.bookTicketService.getShowDetails(showId.longValue());
-    // }
 }

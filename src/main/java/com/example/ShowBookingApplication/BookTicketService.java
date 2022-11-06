@@ -44,8 +44,9 @@ public class BookTicketService {
                     res.add(seat);
                 }
             }
+        } else {
+            return null;
         }
-
         return res;
     }
     
@@ -61,7 +62,7 @@ public class BookTicketService {
 
     public String getShowAvailableSeats(Long showId) {
         Optional<Show> show = showRepository.findById(showId);
-        if (show.isPresent()) {
+        if (show != null && show.isPresent()) {
             List<String> availSeats = getAvailSeats(show.get());
             return "Available seats for Show Id " + showId + " : " + availSeats;
 
@@ -73,7 +74,7 @@ public class BookTicketService {
     public String cancelBooking(Long ticketNo, Integer phoneNumber) {
         Optional<Buyer> ticket = buyerRepository.findByTicketIdAndBuyerPhoneNumber(ticketNo, phoneNumber);
 
-        if (ticket.isPresent()) {
+        if (ticket != null && ticket.isPresent()) {
             LocalDateTime currTime = LocalDateTime.now();
             Integer cancellationWindow = showRepository.findById(ticket.get().getShowId()).get().getCancellationWindow();
             LocalDateTime cancellationTime = ticket.get().getBookingTime().plusMinutes(cancellationWindow);
@@ -92,7 +93,7 @@ public class BookTicketService {
     public String getShowDetails(Long showId) {
         Optional<Show> show = showRepository.findById(showId);
 
-        if (show.isPresent()) {
+        if (show != null && show.isPresent()) {
             List<Buyer> buyerList = buyerRepository.findByShowId(showId);
             buyerList.sort((e1, e2) -> e1.getSeatNumber().compareTo(e2.getSeatNumber())); 
             List<String> buyerStrData = new ArrayList<>();
