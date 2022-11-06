@@ -56,7 +56,6 @@ public class BookTicketService {
         if (show.isPresent()) {
             List<Buyer> buyerList = buyerRepository.findByShowId(showId);
             List<String> bookedSeats = buyerList.stream().map(Buyer::getSeatNumber).collect(Collectors.toList());
-
             List<String> allSeats = this.getAllSeats(show.get().getNumOfRows(), show.get().getNumOfSeatsPerRow());
             allSeats.removeAll(bookedSeats);
             return "Available seats for Show Id " + showId + " : " + allSeats;
@@ -81,17 +80,20 @@ public class BookTicketService {
 
     }
 
-    public ShowDTO getShowDetails(Long showId) {
-        Show show = showRepository.findById(showId).get();
-        List<Buyer> buyerList = buyerRepository.findByShowId(showId); 
+    public String getShowDetails(Long showId) {
+        Optional<Show> show = showRepository.findById(showId);
+        if (show.isPresent()) {
+            List<Buyer> buyerList = buyerRepository.findByShowId(showId); 
 
-        ShowDTO showDTO = new ShowDTO();
-        showDTO.setShowId(showId);
-        showDTO.setCancellationWindow(show.getCancellationWindow());
-        showDTO.setBuyerDetails(buyerList);
-        // showDTO.setAvailSeats(getShowAvailableSeats(showId));
+            
 
-        return showDTO;
+            String result = "Show Id: " + showId.toString() + "\n" + 
+            "Show Cancellation Window Time: " + show.get().getCancellationWindow() +  "\n" + 
+            "Show " + getShowAvailableSeats(showId) + "\n";
+            return result;
+        } else {
+            return "Invalid Show Id! Show Id entered: " + showId;
+        }
     }
 
     public String bookTicket(BuyerDTO buyer) {

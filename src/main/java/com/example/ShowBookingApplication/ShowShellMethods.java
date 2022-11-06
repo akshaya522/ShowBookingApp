@@ -4,6 +4,14 @@ import java.util.List;
 
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.table.ArrayTableModel;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
+import org.springframework.shell.table.TableModel;
+
 
 @ShellComponent
 public class ShowShellMethods {
@@ -23,12 +31,11 @@ public class ShowShellMethods {
 
 
     @ShellMethod(value = "Set User Role", key = "User")
-    public String view(String user) {
-
+    public String view(@ShellOption() String user) {
         if (ADMIN.equals(user.trim().toLowerCase())) {
             isAdmin = true;
             isBuyer = false;
-            return "Welcome admin user!";
+            return "Welcome admin user Enter Setup to start!";
         } else if (BUYER.equals(user.trim().toLowerCase())) {
             isBuyer = true;
             isAdmin = false;
@@ -56,10 +63,7 @@ public class ShowShellMethods {
     @ShellMethod(value = "Get Show Details", key = "View")
     public String view(Integer a) {
         if (isAdmin) {
-            ShowDTO show = this.bookTicketService.getShowDetails(a.longValue());
-            String result = "Show Id: " + show.getShowId().toString() + "\n" + 
-            "Show Cancellation Window Time: " + show.getCancellationWindow() +  "\n" + 
-            "Show Available Seats: " + show.getAvailSeats() + "\n";
+            String result = this.bookTicketService.getShowDetails(a.longValue());
             return result;
         } else {
             return "Only Admins are allowed to View shows";
@@ -71,7 +75,7 @@ public class ShowShellMethods {
         if (isBuyer) {
             return this.bookTicketService.getShowAvailableSeats(a.longValue());
         }  else {
-            return "Only Buyers are allowed to check availability of shows";
+            return "Only Buyers are allowed to check show Availability";
         }
     }
 
