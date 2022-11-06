@@ -36,3 +36,7 @@
 1667734275447:Cancel --ticketNo 3 --phoneNo 8231
 1667734281812:User Buyer
 1667734283510:Cancel --ticketNo 3 --phoneNo 8231
+1667734390809:Availability 1
+1667734410471:Book --showId 1 --seats "A1,A2" --phoneNo 8231
+1667734433672:User Admin
+1667734435073:View 1

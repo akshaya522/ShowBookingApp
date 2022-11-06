@@ -86,8 +86,7 @@ public class ShowShellMethods {
             buyer.setSeatNumberList(seats);
             buyer.setBuyerPhoneNumber(phoneNo);
 
-            String ticketIds = this.bookTicketService.bookTicket(buyer);
-            String result = "Succesfully Booked! Ticket Ids Booked: " + ticketIds;
+            String result = this.bookTicketService.bookTicket(buyer);
             return result;
         } else {
             return "Only Buyers are allowed to book tickets. Login as a Buyer";
