@@ -18,19 +18,24 @@ public class ShowShellMethods {
 
     Boolean isAdmin = false;
     Boolean isBuyer = false;
+    private final String ADMIN = "admin";
+    private final String BUYER = "buyer";
+
 
     @ShellMethod(value = "Set User Role", key = "User")
     public String view(String user) {
 
-        if (user.equals("A")) {
+        if (ADMIN.equals(user.trim().toLowerCase())) {
             isAdmin = true;
             isBuyer = false;
-        } else {
+            return "Welcome admin user!";
+        } else if (BUYER.equals(user.trim().toLowerCase())) {
             isBuyer = true;
             isAdmin = false;
+            return "Welcome buyer user!";
+        } else {
+            return "Invalid Input! Enter 'Admin' or 'Buyer'";
         }
-
-        return "Welcome " +  (isAdmin ? "admin user!" : "buyer user!");
     }
 
     @ShellMethod(value = "Create Show", key = "Setup")
@@ -41,7 +46,7 @@ public class ShowShellMethods {
             show.setNumOfSeatsPerRow(seats);
             show.setCancellationWindow(cancellationMins);
 
-            String result = this.bookTicketService.saveshow(show);
+            String result = this.bookTicketService.saveShow(show);
             return result;
         } else {
             return "Only Admins are allowed to Setup shows";
@@ -50,38 +55,49 @@ public class ShowShellMethods {
 
     @ShellMethod(value = "Get Show Details", key = "View")
     public String view(Integer a) {
-
-        ShowDTO show = this.bookTicketService.getShowDetails(a.longValue());
-        String result = "Show Id: " + show.getShowId().toString() + "\n" + 
-        "Show Cancellation Window Time: " + show.getCancellationWindow() +  "\n" + 
-        "Show Available Seats: " + show.getAvailSeats() + "\n";
-
-        return result;
+        if (isAdmin) {
+            ShowDTO show = this.bookTicketService.getShowDetails(a.longValue());
+            String result = "Show Id: " + show.getShowId().toString() + "\n" + 
+            "Show Cancellation Window Time: " + show.getCancellationWindow() +  "\n" + 
+            "Show Available Seats: " + show.getAvailSeats() + "\n";
+            return result;
+        } else {
+            return "Only Admins are allowed to View shows";
+        }
     }
 
     @ShellMethod(value = "Get show availability", key = "Availability")
     public String availability(Integer a) {
-
-        List<String> seats = this.bookTicketService.getShowAvailableSeats(a.longValue());
-        String result = "Available seats for showId: " + a + " are " + seats;
-        return result;
+        if (isBuyer) {
+            return this.bookTicketService.getShowAvailableSeats(a.longValue());
+        }  else {
+            return "Only Buyers are allowed to check availability of shows";
+        }
     }
 
     @ShellMethod(value = "Book show", key = "Book")
     public String bookShow(Integer showId, String seats, Integer phoneNo) {
-        BuyerDTO buyer = new BuyerDTO();
-        buyer.setShowId(showId.longValue());
-        buyer.setSeatNumberList(seats);
-        buyer.setBuyerPhoneNumber(phoneNo);
+        if (isBuyer) {
+            BuyerDTO buyer = new BuyerDTO();
+            buyer.setShowId(showId.longValue());
+            buyer.setSeatNumberList(seats);
+            buyer.setBuyerPhoneNumber(phoneNo);
 
-        String ticketIds = this.bookTicketService.bookTicket(buyer);
-        String result = "Succesfully Booked! Ticket Ids Booked: " + ticketIds;
-        return result;
+            String ticketIds = this.bookTicketService.bookTicket(buyer);
+            String result = "Succesfully Booked! Ticket Ids Booked: " + ticketIds;
+            return result;
+        } else {
+            return "Only Buyers are allowed to book tickets. Login as a Buyer";
+        }
     }
 
     @ShellMethod(value = "Cancel booking", key = "Cancel")
     public String cancelBooking(Integer ticketNo, Integer phoneNo) {
-        String result = this.bookTicketService.cancelBooking(ticketNo.longValue(), phoneNo);
-        return result;
+        if (isBuyer) {
+            String result = this.bookTicketService.cancelBooking(ticketNo.longValue(), phoneNo);
+            return result;
+        } else {
+            return "Only Buyers are allowed to cancel tickets. Login as a Buyer";
+        }
     }
 }

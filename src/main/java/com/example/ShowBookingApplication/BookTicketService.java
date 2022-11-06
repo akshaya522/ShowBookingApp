@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class BookTicketService {
         this.bookTicketServiceValidator = bookTicketServiceValidator;
     }
 
-    public String saveshow(Show show){
+    public String saveShow(Show show){
         String validator = this.bookTicketServiceValidator.createShowValidator(show);
         if (validator == null) {
             Show show1 = this.showRepository.save(show);
@@ -50,26 +51,19 @@ public class BookTicketService {
         return res;
     }
 
-    public List<String> getShowAvailableSeats(Long showId) {
-        Show show = showRepository.findById(showId).get();
-        List<Buyer> buyerList = buyerRepository.findByShowId(showId);
-        List<String> bookedSeats = buyerList.stream().map(Buyer::getSeatNumber).collect(Collectors.toList());
+    public String getShowAvailableSeats(Long showId) {
+        Optional<Show> show = showRepository.findById(showId);
+        if (show.isPresent()) {
+            List<Buyer> buyerList = buyerRepository.findByShowId(showId);
+            List<String> bookedSeats = buyerList.stream().map(Buyer::getSeatNumber).collect(Collectors.toList());
 
-        List<String> availSeats = new ArrayList<>();
+            List<String> allSeats = this.getAllSeats(show.get().getNumOfRows(), show.get().getNumOfSeatsPerRow());
+            allSeats.removeAll(bookedSeats);
+            return "Available seats for Show Id " + showId + " : " + allSeats;
 
-        if(show.getNumOfRows() > 0 && show.getNumOfRows() < 27){
-            for(int i = 1; i < show.getNumOfRows()+1; i++){
-                String rowVal = String.valueOf((char)(i+64));
-                for(int j = 0; j<show.getNumOfSeatsPerRow(); j++){
-                    String seat = rowVal + String.valueOf(j+1);
-                    if(!bookedSeats.contains(seat)){
-                        availSeats.add(seat);
-                    }
-                }
-            }
+        } else {
+            return "Invalid Show Id! Show Id entered: " + showId;
         }
-
-        return availSeats;
     }
 
     public String cancelBooking(Long ticketNo, Integer phoneNumber) {
@@ -95,7 +89,7 @@ public class BookTicketService {
         showDTO.setShowId(showId);
         showDTO.setCancellationWindow(show.getCancellationWindow());
         showDTO.setBuyerDetails(buyerList);
-        showDTO.setAvailSeats(getShowAvailableSeats(showId));
+        // showDTO.setAvailSeats(getShowAvailableSeats(showId));
 
         return showDTO;
     }

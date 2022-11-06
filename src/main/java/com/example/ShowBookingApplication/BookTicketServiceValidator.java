@@ -24,18 +24,18 @@ public class BookTicketServiceValidator {
 
 
     public String createShowValidator(Show show) {
-        if (show.getNumOfRows() < 0) {
-            return "Number of rows in show cannot be less than zero";
+        if (show.getNumOfRows() < 1) {
+            return "Number of rows in show cannot be less than one";
         } else if (show.getNumOfRows() > 26) {
             return "Number of rows in show cannot be more than 26";
-        } else if (show.getNumOfSeatsPerRow() < 0) {
-            return "Number of seats per row cannot be less than zero";
+        } else if (show.getNumOfSeatsPerRow() < 1) {
+            return "Number of seats per row cannot be less than one";
         } else if (show.getNumOfSeatsPerRow() > 10) {
             return "Number of seats per row cannot be more than 10";
         } else if (show.getCancellationWindow() < 0) {
-            return "Cancelletion window minutes cannot be zero";
+            return "Cancelletion window cannot be less than zero minutes";
         } else if (show.getCancellationWindow() > 120) {
-            return "Cancellation window minutes cannot be more than 120";
+            return "Cancellation window cannot be more than 120 minutes";
         } else {
             return null;
         }
