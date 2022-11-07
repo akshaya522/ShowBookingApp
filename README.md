@@ -24,3 +24,9 @@ For Buyer User
 1. To check show seat Availability: `Availability` `<Show Id>` (Eg: Availability 1)
 2. To Book Ticket: `Book` --showId `<ShowId>` --seats `<Seat List>` --phoneNo `<Phone #>` (Eg: Book --showId 1 --seats "A1,A2" --phoneNo 81234567)
 3. To Cancel Ticket: `Cancel` --ticketNo `<Ticket #>` --phoneNo `<Phone #>` (Eg: Cancel --ticketNo 1 --phoneNo 81234567)
+
+# Assumptions 
+1. User can either be an Admin or Buyer, not both at the same time.
+2. Number of seats per row in show cannot be less than 1. 
+3. Cancellation window minutes for a show cannot be more than 2 hours. 
+4. Buyer mobile phone number when booking tickets has to be a valid Singapore number. 
