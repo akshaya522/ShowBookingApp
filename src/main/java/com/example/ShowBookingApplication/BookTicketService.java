@@ -126,7 +126,7 @@ public class BookTicketService {
             }
             return result;
         } else {
-            return shellHelper.getErrorMessage("Invalid Show Id! Show Id entered: " + showId);
+            return "Invalid Show Id! Show Id entered: " + showId;
         }
     }
 

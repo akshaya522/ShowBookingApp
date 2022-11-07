@@ -5,6 +5,7 @@ import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.springframework.beans.factory.annotation.Value;
 
+
 public class ShellHelper {
 
     private Terminal terminal;

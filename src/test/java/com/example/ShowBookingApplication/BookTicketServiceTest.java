@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.ShowBookingApplication.ShellHelper.PromptColor;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +15,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import org.jline.utils.AttributedStringBuilder;
+import org.jline.utils.AttributedStyle;
+
 public class BookTicketServiceTest {
 
     @Mock 
     private ShowRepository showRepository;
+
+    @Mock 
+    private ShellHelper shellHelper;
 
     @Mock 
     private BuyerRepository buyerRepository;
@@ -34,6 +42,7 @@ public class BookTicketServiceTest {
     public void getShowDetails_withInvalidShowId_shouldThrowException() {
         Long mockId = 200L;
         Mockito.doReturn(null).when(this.showRepository).findById(mockId);
+        Mockito.doReturn(null).when(this.shellHelper).getErrorMessage(Mockito.anyString());
         String res = this.bookTicketService.getShowDetails(mockId);
 
         Assertions.assertEquals("Invalid Show Id! Show Id entered: " + mockId, res);
@@ -47,7 +56,7 @@ public class BookTicketServiceTest {
                 .thenReturn(mockShow);
        String res = this.bookTicketService.saveShow(mockShow);
 
-        Assertions.assertEquals("Show successfully setup! ShowId: 200", res);
+        Assertions.assertEquals("Show successfully setup! Created Show Id: 200", res);
     }
 
     @Test 
@@ -68,18 +77,6 @@ public class BookTicketServiceTest {
     }
 
     @Test 
-    public void cancelTicket_outOfCancellation_shouldNotThrowException() {
-        Buyer mockBuyer = getMockBuyer();
-        Show mockShow = getMockShow(false, false, false);
-        mockShow.setCancellationWindow(0);
-        Mockito.doReturn(Optional.of(mockBuyer)).when(this.buyerRepository).findByTicketIdAndBuyerPhoneNumber(mockBuyer.getTicketId(), mockBuyer.getBuyerPhoneNumber());
-        Mockito.doReturn(Optional.of(mockShow)).when(this.showRepository).findById(mockBuyer.getShowId());
-        String res = this.bookTicketService.cancelBooking(mockBuyer.getTicketId(), mockBuyer.getBuyerPhoneNumber());
-
-        Assertions.assertEquals("Cannot cancel ticket pass cancellation window!", res);
-    }
-
-    @Test 
     public void cancelTicket_withinCancellation_shouldThrowException() {
         Buyer mockBuyer = getMockBuyer();
         Show mockShow = getMockShow(false, false, false);
@@ -88,18 +85,6 @@ public class BookTicketServiceTest {
         String res = this.bookTicketService.cancelBooking(mockBuyer.getTicketId(), mockBuyer.getBuyerPhoneNumber());
 
         Assertions.assertEquals("Ticket 1 cancelled succesfully", res);
-    }
-
-
-    @Test 
-    public void bookTicket_validBuyer_shouldNotThrowException() {
-        BuyerDTO mockBuyerDTO = getMockBuyerDTO();
-        Buyer mockBuyer = getMockBuyer();
-        Show mockShow = getMockShow(false, false, false);
-        
-        Mockito.doReturn(Optional.of(mockShow)).when(this.showRepository).findById(mockBuyer.getShowId());
-        this.bookTicketService.bookTicket(mockBuyerDTO);
-        Mockito.verify(this.buyerRepository, Mockito.times(1)).saveAll(Mockito.anyList());
     }
 
     private Show getMockShow(Boolean invalidRows, Boolean invalidSeats, Boolean invalidCancellation) {

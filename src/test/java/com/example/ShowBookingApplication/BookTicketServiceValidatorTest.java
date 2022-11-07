@@ -72,7 +72,7 @@ public class BookTicketServiceValidatorTest {
         BuyerDTO buyerDTO = getMockBuyerDTO();
 
         String res = bookTicketServiceValidator.bookTicketValidator(buyerDTO, Arrays.asList("A1") , Arrays.asList());
-        Assertions.assertEquals("Seat number lists cannot be empty", res);
+        Assertions.assertEquals("Seat number lists cannot be empty!", res);
     }
 
     @Test 
@@ -93,7 +93,7 @@ public class BookTicketServiceValidatorTest {
         BuyerDTO buyerDTO = getMockBuyerDTO();
 
         String res = bookTicketServiceValidator.bookTicketValidator(buyerDTO, Arrays.asList("A1", "A2", "Z1") , Arrays.asList("Z1", "Z2"));
-        Assertions.assertEquals("There are invalid seat numbers: [Z2]", res);
+        Assertions.assertEquals("There are invalid seat numbers: [Z2] Tickets not booked!" , res);
     }
 
     @Test 
