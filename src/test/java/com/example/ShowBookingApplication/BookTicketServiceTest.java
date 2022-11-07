@@ -1,27 +1,17 @@
 package com.example.ShowBookingApplication;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.ShowBookingApplication.BookTicketService;
-import com.example.ShowBookingApplication.BookTicketServiceValidator;
-
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.server.ResponseStatusException;
 
 public class BookTicketServiceTest {
 
@@ -101,25 +91,16 @@ public class BookTicketServiceTest {
     }
 
 
-    // @Test 
-    // public void bookTicket_withinCancellation_shouldThrowException() {
-    //     BuyerDTO mockBuyerDTO = getMockBuyerDTO();
-    //     Buyer mockBuyer = getMockBuyer();
-    //     Show mockShow = getMockShow(false, false, false);
-
-    //     List<Buyer> list = new ArrayList<>();
-    //     list.add(mockBuyer);
-    //     list.add(mockBuyer);
+    @Test 
+    public void bookTicket_validBuyer_shouldNotThrowException() {
+        BuyerDTO mockBuyerDTO = getMockBuyerDTO();
+        Buyer mockBuyer = getMockBuyer();
+        Show mockShow = getMockShow(false, false, false);
         
-    //     Mockito.doReturn(Optional.of(mockShow)).when(this.showRepository).findById(mockBuyer.getShowId());
-    //     Mockito.when(buyerRepository.saveAll(Mockito.any(List.class))
-    //             .thenReturn(list));
-    //     String res = this.bookTicketService.cancelBooking(mockBuyer.getTicketId(), mockBuyer.getBuyerPhoneNumber());
-
-    //     Assertions.assertEquals("Ticket 1 cancelled succesfully", res);
-    // }
-
-
+        Mockito.doReturn(Optional.of(mockShow)).when(this.showRepository).findById(mockBuyer.getShowId());
+        this.bookTicketService.bookTicket(mockBuyerDTO);
+        Mockito.verify(this.buyerRepository, Mockito.times(1)).saveAll(Mockito.anyList());
+    }
 
     private Show getMockShow(Boolean invalidRows, Boolean invalidSeats, Boolean invalidCancellation) {
         Show show = new Show();

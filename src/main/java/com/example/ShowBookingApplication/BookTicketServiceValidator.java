@@ -47,7 +47,9 @@ public class BookTicketServiceValidator {
         List<Buyer> buyerList = this.buyerRepository.findByBuyerPhoneNumber(buyerDTO.getBuyerPhoneNumber());
         List<String> invalidSeats = bookingSeats.stream().filter(seat -> !availSeats.contains(seat.toUpperCase())).collect(Collectors.toList());
 
-        if (bookingSeats.size() == 0) {
+        if (availSeats.size() == 0) {
+            return "There are no more available seats for this show";
+        } else if (bookingSeats.size() == 0) {
             return "Seat number lists cannot be empty";
         } else if (buyerList.size() == 1) {
             return "There is an existing booking with this number. Only one booking per phone number is allowed";
@@ -59,15 +61,6 @@ public class BookTicketServiceValidator {
             return null;
         }
     }
-
-    public static int findMax(int arr[]){  
-        int max=0;  
-        for(int i=1;i<arr.length;i++){  
-            if(max<arr[i])  
-                max=arr[i];  
-        }  
-        return max;  
-    } 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 409
     class ShowDoesNotExist extends RuntimeException{
