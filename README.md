@@ -1,10 +1,9 @@
 # Show Booking Application
 
-Java application to setup and book tickets for shows for 2 user roles Admin & Buyer.
+Java application for Show setup and bookings. 
 Admins can setup and check show details. Buyers can check seat availability, book tickets and cancel tickets. 
-
 ---- 
-Implemented using SpringBoot and Spring shell. 
+Implemented using SpringBoot and Spring Shell. 
 
 # How to run
 
