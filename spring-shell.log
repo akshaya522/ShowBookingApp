@@ -69,3 +69,10 @@
 1667799170546:Setup --rows 22 --seats 8 --cancellationMins 10
 1667799175433:User bUYER
 1667799231553:Book --showId 1 --seats "A1,A2" --phoneNo 82317131
+1667800099676:Us e
+1667800165150:User
+1667800415648:User admin
+1667800429760:Setup --rows 2 --seats 2 --cancellationMins 18
+1667800433094:User buyer
+1667800436599:Availability 1
+1667800484290:Book --showId 1 --seats "A1,Z1" --phoneNo 82317131
