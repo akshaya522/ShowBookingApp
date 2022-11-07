@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,6 +16,9 @@ public class BookTicketService {
     private final BuyerRepository buyerRepository;
     private final ShowRepository showRepository;
     private final BookTicketServiceValidator bookTicketServiceValidator;
+
+    @Autowired
+    ShellHelper shellHelper;
 
     public BookTicketService(
         BuyerRepository buyerRepository,
@@ -37,7 +42,7 @@ public class BookTicketService {
             Show show1 = this.showRepository.save(show);
             return "Show successfully setup! Created Show Id: " + show1.getShowId().toString();
         }
-        return validator;
+        return shellHelper.getErrorMessage(validator);
     }
 
     /**
@@ -87,10 +92,10 @@ public class BookTicketService {
         Optional<Show> show = showRepository.findById(showId);
         if (show != null && show.isPresent()) {
             List<String> availSeats = getAvailSeats(show.get());
-            return "Available seats for Show Id " + showId + " : " + availSeats;
+            return shellHelper.getInfoMessage("Available seats for Show Id " + showId + ": ") + availSeats;
 
         } else {
-            return "Invalid Show Id! Show Id entered: " + showId;
+            return shellHelper.getErrorMessage("Invalid Show Id! Show Id entered: " + showId);
         }
     }
 
@@ -108,20 +113,20 @@ public class BookTicketService {
             buyerList.sort((e1, e2) -> e1.getSeatNumber().compareTo(e2.getSeatNumber())); 
             List<String> buyerStrData = new ArrayList<>();
             buyerList.forEach(i -> {
-                buyerStrData.add("Ticket #: " + i.getTicketId() + ", Buyer Phone #: " + i.getBuyerPhoneNumber() + ", Seats allocated: " + i.getSeatNumber());
+                buyerStrData.add(shellHelper.getInfoMessage("Ticket #: ") + i.getTicketId() + ", " + shellHelper.getInfoMessage("Buyer Phone #: ") + i.getBuyerPhoneNumber() + ", " + shellHelper.getInfoMessage("Seats Allocated: ") + i.getSeatNumber());
             });
 
-            String result = "Show Id: " + showId.toString() + "\n" + 
-            "Show Cancellation Window Time: " + show.get().getCancellationWindow() +  "\n" + 
+            String result = shellHelper.getInfoMessage("Show Id: ") + showId.toString() + "\n" + 
+            shellHelper.getInfoMessage("Show Cancellation Window Time: ") + show.get().getCancellationWindow() +  "\n" + 
             getShowAvailableSeats(showId) + "\n"; 
             
             /** If buyer list exists add buyer data */
             if (buyerStrData.size() > 0) {
-                result = result + "Buyer list: " + "\n" + StringUtils.join(buyerStrData, "\n");
+                result = result + shellHelper.getInfoMessage("Buyer list: ") + "\n" + StringUtils.join(buyerStrData, "\n");
             }
             return result;
         } else {
-            return "Invalid Show Id! Show Id entered: " + showId;
+            return shellHelper.getErrorMessage("Invalid Show Id! Show Id entered: " + showId);
         }
     }
 
@@ -156,15 +161,15 @@ public class BookTicketService {
                 List<Buyer> list1 = buyerRepository.saveAll(buyerList);
                 List<String> buyerStrData = new ArrayList<>();
                 list1.forEach(i -> {
-                    buyerStrData.add("Seat booked: " + i.getSeatNumber() + ", Ticket #: " + i.getTicketId());
+                    buyerStrData.add(shellHelper.getInfoMessage("Seat booked: ") + i.getSeatNumber() + ", " + shellHelper.getInfoMessage("Ticket #: ") + i.getTicketId());
                 });
 
-                return "Successfully Booked! Ticket Ids booked: " + "\n" + StringUtils.join(buyerStrData, "\n");
+                return shellHelper.getInfoMessage("Successfully Booked! Ticket Ids booked: ") + "\n" + StringUtils.join(buyerStrData, "\n");
             } else {
-                return validator;
+                return shellHelper.getErrorMessage(validator);
             }
         } else {
-            return "Invalid Show Id: " + buyer.getShowId().toString();
+            return shellHelper.getErrorMessage("Invalid Show Id: ") + buyer.getShowId().toString();
         }
     }
 
@@ -187,10 +192,10 @@ public class BookTicketService {
                 buyerRepository.delete(ticket.get());
                 return "Ticket " + ticketNo + " cancelled succesfully";
             } else {
-                return "Cannot cancel ticket pass cancellation window!";
+                return shellHelper.getErrorMessage("Cannot cancel ticket pass cancellation window!");
             }
         } else {
-            return "No existing booking found for ticket number and phone number!";
+            return shellHelper.getWarnMessage("No existing booking found for ticket number and phone number!");
         }
     }
 }

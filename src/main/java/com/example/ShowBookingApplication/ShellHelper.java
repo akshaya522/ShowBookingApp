@@ -7,18 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class ShellHelper {
 
-    @Value("${shell.out.info}")
-    public String infoColor;
-
-    @Value("${shell.out.success}")
-    public String successColor;
-
-    @Value("${shell.out.warning}")
-    public String warningColor;
-
-    @Value("${shell.out.error}")
-    public String errorColor;
-
     private Terminal terminal;
 
     public ShellHelper(Terminal terminal) {
@@ -30,11 +18,32 @@ public class ShellHelper {
     }
 
     public String getInfoMessage(String message) {
-        return getColored(message, PromptColor.valueOf(infoColor));
+        return getColored(message, PromptColor.BLUE);
     }
 
     public String getErrorMessage(String message) {
-        return getColored(message, PromptColor.valueOf(errorColor));
+        return getColored(message, PromptColor.RED);
+    }
+
+    public String getSuccessMessage(String message) {
+        return getColored(message, PromptColor.GREEN);
+    }
+
+    public String getWarnMessage(String message) {
+        return getColored(message, PromptColor.YELLOW);
+    }
+
+    public String getPromptMessage(String message) {
+        return getColored(message, PromptColor.CYAN);
+    }
+
+    public void print(String message, PromptColor color) {
+        String toPrint = message;
+        if (color != null) {
+            toPrint = getColored(message, color);
+        }
+        terminal.writer().println(toPrint);
+        terminal.flush();
     }
 
     public enum PromptColor {

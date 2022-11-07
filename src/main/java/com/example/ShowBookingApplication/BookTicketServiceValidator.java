@@ -67,7 +67,7 @@ public class BookTicketServiceValidator {
             return "There is an existing booking with this number. Only one booking per phone number is allowed";
         } else if (invalidSeats.size() > 0) {
             return "There are invalid seat numbers: " + invalidSeats + " Tickets not booked!";
-        } else if (!buyerDTO.getBuyerPhoneNumber().toString().matches("^[6|7|8][0-9]{7}")) {
+        } else if (!buyerDTO.getBuyerPhoneNumber().toString().matches("^[6|9|8][0-9]{7}")) {
             return "Please enter a valid Singapore phone number Eg: 81234567";
         } else {
             return null;
