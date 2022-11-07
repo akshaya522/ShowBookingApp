@@ -1,7 +1,7 @@
 package com.example.ShowBookingApplication;
 
 public class BuyerDTO {
-    private Long ticketId; 
+    private Long ticketId;
     private Long showId;
     private Integer buyerPhoneNumber;
     private Integer seatNumber;

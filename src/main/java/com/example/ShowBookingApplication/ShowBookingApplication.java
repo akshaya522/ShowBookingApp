@@ -17,8 +17,7 @@ public class ShowBookingApplication implements CommandLineRunner {
 	public static void main(String[] args) throws IOException {
 
 		SpringApplication.run(ShowBookingApplication.class, args);
-		Bootstrap.main(args);
-			
+		Bootstrap.main(args);	
 	}
 
 	@Override 

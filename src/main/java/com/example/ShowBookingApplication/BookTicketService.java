@@ -25,17 +25,30 @@ public class BookTicketService {
         this.bookTicketServiceValidator = bookTicketServiceValidator;
     }
 
+    /**
+     * This function validates user show input and saves valid show 
+     * @param show - Show entity 
+     * @return - returns created showId 
+     */
     public String saveShow(Show show){
+        /** Validate show input */
         String validator = this.bookTicketServiceValidator.createShowValidator(show);
         if (validator == null) {
             Show show1 = this.showRepository.save(show);
-            return "Show successfully setup! ShowId: " + show1.getShowId().toString();
+            return "Show successfully setup! Created Show Id: " + show1.getShowId().toString();
         }
         return validator;
     }
 
+    /**
+     * This function get all seats in a show 
+     * @param rows - number of rows in show 
+     * @param seatsPerRow - number of seats per row in show 
+     * @return - returns list of seat numbers
+     */
     public List<String> getAllSeats(Integer rows, Integer seatsPerRow) {
         List<String> res = new ArrayList<>();
+        /** Invalid number of seats */
         if(rows > 0 && rows < 27){
             for(int i = 1; i < rows+1; i++){
                 String rowVal = String.valueOf((char)(i+64));
@@ -51,6 +64,11 @@ public class BookTicketService {
     }
     
 
+    /**
+     * This function get all available seats in a show
+     * @param show - show entity  
+     * @return - returns list of available seat numbers for show 
+     */
     public List<String> getAvailSeats(Show show) {
         List<Buyer> buyerList = buyerRepository.findByShowId(show.getShowId());
         List<String> bookedSeats = buyerList.stream().map(Buyer::getSeatNumber).collect(Collectors.toList());
@@ -60,6 +78,11 @@ public class BookTicketService {
         return allSeats;
     }
 
+    /**
+     * This function validates showId and return list of available seat number
+     * @param showId - show Id 
+     * @return - returns list of available seat numbers for show 
+     */
     public String getShowAvailableSeats(Long showId) {
         Optional<Show> show = showRepository.findById(showId);
         if (show != null && show.isPresent()) {
@@ -71,6 +94,87 @@ public class BookTicketService {
         }
     }
 
+    /**
+     * This function validates showId and return show details 
+     * @param showId - show Id 
+     * @return - return showId, cancellation window minutes, show available seats, and existing buyer list 
+     */
+    public String getShowDetails(Long showId) {
+        Optional<Show> show = showRepository.findById(showId);
+
+        if (show != null && show.isPresent()) {
+            List<Buyer> buyerList = buyerRepository.findByShowId(showId);
+            /** Sort existing booked seats by seat number */
+            buyerList.sort((e1, e2) -> e1.getSeatNumber().compareTo(e2.getSeatNumber())); 
+            List<String> buyerStrData = new ArrayList<>();
+            buyerList.forEach(i -> {
+                buyerStrData.add("Ticket #: " + i.getTicketId() + ", Buyer Phone #: " + i.getBuyerPhoneNumber() + ", Seats allocated: " + i.getSeatNumber());
+            });
+
+            String result = "Show Id: " + showId.toString() + "\n" + 
+            "Show Cancellation Window Time: " + show.get().getCancellationWindow() +  "\n" + 
+            getShowAvailableSeats(showId) + "\n"; 
+            
+            /** If buyer list exists add buyer data */
+            if (buyerStrData.size() > 0) {
+                result = result + "Buyer list: " + "\n" + StringUtils.join(buyerStrData, "\n");
+            }
+            return result;
+        } else {
+            return "Invalid Show Id! Show Id entered: " + showId;
+        }
+    }
+
+    /**
+     * This function validating user input and books tickets when valid input
+     * 
+     * @param buyer - BuyerDTO - with seatList, phoneNumber, showId 
+     * @return - return list of booked ticket numbers
+     */
+    public String bookTicket(BuyerDTO buyer) {
+        Optional<Show> show = this.showRepository.findById(buyer.getShowId());
+
+        if (show != null && show.isPresent()) {
+            List<String> seatsToBook = Arrays.asList(buyer.getSeatNumberList().trim().split("\\s*,\\s*"));
+            List<String> availSeats = getAvailSeats(show.get());
+            String validator = this.bookTicketServiceValidator.bookTicketValidator(buyer, availSeats, seatsToBook);
+
+            if (validator == null) {
+                List<Buyer> buyerList = new ArrayList<>();
+
+                seatsToBook.stream().forEach(
+                    seat -> {
+                        Buyer ticket = new Buyer();
+                        ticket.setSeatNumber(seat.toUpperCase());
+                        ticket.setBuyerPhoneNumber(buyer.getBuyerPhoneNumber());
+                        ticket.setShowId(buyer.getShowId());
+                        ticket.setBookingTime(LocalDateTime.now());
+                        buyerList.add(ticket);
+                    }
+                );
+
+                List<Buyer> list1 = buyerRepository.saveAll(buyerList);
+                List<String> buyerStrData = new ArrayList<>();
+                list1.forEach(i -> {
+                    buyerStrData.add("Seat booked: " + i.getSeatNumber() + ", Ticket #: " + i.getTicketId());
+                });
+
+                return "Successfully Booked! Ticket Ids booked: " + "\n" + StringUtils.join(buyerStrData, "\n");
+            } else {
+                return validator;
+            }
+        } else {
+            return "Invalid Show Id: " + buyer.getShowId().toString();
+        }
+    }
+
+    /**
+     * This function cancels valid tickets 
+     * 
+     * @param ticketNo - ticketNo to be cancelled
+     * @param phoneNo - phoneNo of buyer  
+     * @return - result of ticket cancellation
+     */
     public String cancelBooking(Long ticketNo, Integer phoneNumber) {
         Optional<Buyer> ticket = buyerRepository.findByTicketIdAndBuyerPhoneNumber(ticketNo, phoneNumber);
 
@@ -86,61 +190,7 @@ public class BookTicketService {
                 return "Cannot cancel ticket pass cancellation window!";
             }
         } else {
-            return "Invalid Ticket No and phone number combo!";
-        }
-    }
-
-    public String getShowDetails(Long showId) {
-        Optional<Show> show = showRepository.findById(showId);
-
-        if (show != null && show.isPresent()) {
-            List<Buyer> buyerList = buyerRepository.findByShowId(showId);
-            buyerList.sort((e1, e2) -> e1.getSeatNumber().compareTo(e2.getSeatNumber())); 
-            List<String> buyerStrData = new ArrayList<>();
-        
-            buyerList.forEach(i -> {
-                buyerStrData.add("Ticket#: " + i.getTicketId() + ", Buyer Phone Number: " + i.getBuyerPhoneNumber() + ", Seats allocated: " + i.getSeatNumber());
-            });
-
-            String result = "Show Id: " + showId.toString() + "\n" + 
-            "Show Cancellation Window Time: " + show.get().getCancellationWindow() +  "\n" + 
-            "Show " + getShowAvailableSeats(showId) + "\n" + 
-            "Buyer list: " + "\n" + StringUtils.join(buyerStrData, "\n");;
-            return result;
-        } else {
-            return "Invalid Show Id! Show Id entered: " + showId;
-        }
-    }
-
-    public String bookTicket(BuyerDTO buyer) {
-        Optional<Show> show = this.showRepository.findById(buyer.getShowId());
-
-        if (show.isPresent()) {
-            List<String> seatNos = Arrays.asList(buyer.getSeatNumberList().trim().split("\\s*,\\s*"));
-            List<String> availSeats = getAvailSeats(show.get());
-            String validator = this.bookTicketServiceValidator.bookTicketValidator(buyer, availSeats, seatNos);
-
-            if (validator == null) {
-                List<Buyer> buyerList = new ArrayList<>();
-
-                seatNos.stream().forEach(
-                    seat -> {
-                        Buyer buyere = new Buyer();
-                        buyere.setSeatNumber(seat.toUpperCase());
-                        buyere.setBuyerPhoneNumber(buyer.getBuyerPhoneNumber());
-                        buyere.setShowId(buyer.getShowId());
-                        buyere.setBookingTime(LocalDateTime.now());
-                        buyerList.add(buyere);
-                    }
-                );
-
-                List<Buyer> list1 = buyerRepository.saveAll(buyerList);
-                return "Success! Tickets booked: " + list1.stream().map(Buyer::getTicketId).collect(Collectors.toList()).toString();
-            } else {
-                return validator;
-            }
-        } else {
-            return "Invalid Show Id: " + buyer.getShowId().toString();
+            return "No existing booking found for ticket number and phone number!";
         }
     }
 }

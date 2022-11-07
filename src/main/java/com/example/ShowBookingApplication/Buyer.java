@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,9 +20,13 @@ public class Buyer {
     @Id
     @GeneratedValue
     private Long ticketId; 
+    @NotNull
     private Long showId;
+    @NotNull
     private Integer buyerPhoneNumber;
+    @NotNull
     private String seatNumber;
+    @NotNull
     private LocalDateTime bookingTime;
 
     public Long getTicketId() {

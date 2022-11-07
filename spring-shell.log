@@ -76,3 +76,60 @@
 1667800433094:User buyer
 1667800436599:Availability 1
 1667800484290:Book --showId 1 --seats "A1,Z1" --phoneNo 82317131
+1667804483089:i
+1667804536810:Setup --rows 10 --seats 1 --cancellationMins 10
+1667804539178:help
+1667804890039:Setup
+1667804900598:Setup --rows 10 --seats 8 --cancellationMins 10
+1667804903799:User Admin
+1667804908404:Setup --rows 10 --seats 8 --cancellationMins 10
+1667804987544:Ue amn
+1667805083295:Setup --rows 19 --seats 7 --cancellationMins 81
+1667805174104:User admin
+1667805188321:Setup --rows 10 --seats 7 --cancellationMins 10
+1667805192343:View 1
+1667805204961:Setup --rows 78 --seats 7 --cancellationMins 10
+1667805212056:Setup --rows 78 --seats 12 --cancellationMins 10
+1667805222106:Setup --rows 12 --seats 12 --cancellationMins 10
+1667805230732:Setup --rows 12 --seats 1 --cancellationMins 1660
+1667805235410:Setup --rows 12 --seats 1 --cancellationMins 10
+1667805257011:User Buyer
+1667805266338:Availability 1
+1667805273405:Availability 2
+1667805294515:Book --showID 2 --seats "A1,A2" --phoneNo 8232
+1667805315959:Book --showId 2 --seats "A1,A2" --phoneNo 8232
+1667805464527:USer admin
+1667805467313:User admin
+1667805539445:User admin
+1667805562915:Setup --rows 10 --seats 4 --cancellationMins 18
+1667805594699:View 1
+1667805598774:User Buyer
+1667805604420:Availability 1
+1667805623106:Book --showId 1 --seats "A1,J4" --phoneNo 8231
+1667805641955:Book --showId 1 --seats "A1,S4" --phoneNo 8231
+1667805655622:Book --showId 1 --seats "A1,B4" --phoneNo 82317131
+1667805661579:Availability 1
+1667805692777:User Admin
+1667805694250:View 1
+1667805812049:User admin
+1667805814587:Setup
+1667805828485:Setup --rows 18 --seats 3 --cancellationMins 10
+1667805838443:User Buyer
+1667805842731:Availability 1
+1667805860506:Book --showId 1 --seats "A2,M2" --phoneNo 82317131
+1667805883338:User Admin
+1667805884933:View 1
+1667805898175:User Buye
+1667805901195:User Buyer
+1667805913083:Cancel --ticketNo 3 --phoneNo 367
+1667805920894:Cancel --ticketNo 3 --phoneNo 82317131
+1667805926341:Availability 1
+1667805937644:User Admin
+1667805942517:View 1
+1667806338288:User admin
+1667806359031:Setup --rows 23 --seats 10 --cancellatiomMins 23
+1667806366948:Setup --rows 23 --seats 10 --cancellationMins 23
+1667806383354:User buyr
+1667806387296:User buyer
+1667806416831:Book --showId 1 --seats "A1,B6,M3" --phoneNo 82317131
+1667806441866:View 1

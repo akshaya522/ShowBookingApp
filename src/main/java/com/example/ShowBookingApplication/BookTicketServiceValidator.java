@@ -25,6 +25,11 @@ public class BookTicketServiceValidator {
     }
 
 
+    /**
+     * This function validates show details entered by user 
+     * @param show - show entity 
+     * @return - returns null if valid Show, returns error string if invalid show  
+     */
     public String createShowValidator(Show show) {
         if (show.getNumOfRows() < 1) {
             return "Number of rows in show cannot be less than one!";
@@ -43,6 +48,13 @@ public class BookTicketServiceValidator {
         }
     }
 
+    /**
+     * This function validates buyer's book ticket request 
+     * @param buyerDTO - buyer details
+     * @param availSeats - available seats in show 
+     * @param bookingSeats - seats requested by buyer  
+     * @return - returns null if valid request, returns error string if invalid request  
+     */
     public String bookTicketValidator(BuyerDTO buyerDTO, List<String> availSeats, List<String> bookingSeats) {
         List<Buyer> buyerList = this.buyerRepository.findByBuyerPhoneNumber(buyerDTO.getBuyerPhoneNumber());
         List<String> invalidSeats = bookingSeats.stream().filter(seat -> !availSeats.contains(seat.toUpperCase())).collect(Collectors.toList());
@@ -50,11 +62,11 @@ public class BookTicketServiceValidator {
         if (availSeats.size() == 0) {
             return "There are no more available seats for this show";
         } else if (bookingSeats.size() == 0) {
-            return "Seat number lists cannot be empty";
+            return "Seat number lists cannot be empty!";
         } else if (buyerList.size() == 1) {
             return "There is an existing booking with this number. Only one booking per phone number is allowed";
         } else if (invalidSeats.size() > 0) {
-            return "There are invalid seat numbers: " + invalidSeats;
+            return "There are invalid seat numbers: " + invalidSeats + " Tickets not booked!";
         } else if (!buyerDTO.getBuyerPhoneNumber().toString().matches("^[6|7|8][0-9]{7}")) {
             return "Please enter a valid Singapore phone number Eg: 81234567";
         } else {
