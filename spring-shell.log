@@ -54,3 +54,18 @@
 1667759721601:Usrdn sri
 1667762653505:Setup
 1667762666502:Setup --rows 3 --seats 19 --cancellationMins 10
+1667798529937:User admin
+1667798546025:Setup --rows 10 --seats 10 --cancellationMins 19
+1667798550547:User Buyer
+1667798569166:Book --showId 1 --seats "A1,A2" --phoneNo dajs
+1667798575833:Book --showId 1 --seats "A1,A2" --phoneNo 82
+1667798976972:User ADMIN
+1667798990952:Setup --rows 19 --seats 18 --cancellationWin 19
+1667798998415:Setup --rows 19 --seats 18 --cancellationMins 10
+1667799007596:Setup --rows 19 --seats 5  --cancellationMins 10
+1667799014513:User buyer
+1667799034708:Book --showId 1  --seats "A1,A2" --phoneNo 8
+1667799162864:Setup --rows 27 --seats 8 --cancellationMins 10
+1667799170546:Setup --rows 22 --seats 8 --cancellationMins 10
+1667799175433:User bUYER
+1667799231553:Book --showId 1 --seats "A1,A2" --phoneNo 82317131

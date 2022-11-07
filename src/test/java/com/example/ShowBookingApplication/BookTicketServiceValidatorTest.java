@@ -96,6 +96,23 @@ public class BookTicketServiceValidatorTest {
         Assertions.assertEquals("There are invalid seat numbers: [Z2]", res);
     }
 
+    @Test 
+    public void bookTicketValidator_invalidPhoneNo_showThrowException() {
+        BuyerDTO buyerDTO = getMockBuyerDTO();
+        buyerDTO.setBuyerPhoneNumber(82);
+
+        String res = bookTicketServiceValidator.bookTicketValidator(buyerDTO, Arrays.asList("A1", "A2", "Z1") , Arrays.asList("A1"));
+        Assertions.assertEquals("Please enter a valid Singapore phone number Eg: 81234567", res);
+    }
+
+    @Test 
+    public void bookTicketValidator_valid_showNotThrowException() {
+        BuyerDTO buyerDTO = getMockBuyerDTO();
+
+        String res = bookTicketServiceValidator.bookTicketValidator(buyerDTO, Arrays.asList("A1", "A2") , Arrays.asList("A1"));
+        Assertions.assertEquals(null, res);
+    }
+
     private Show getMockShow(Boolean invalidRows, Boolean invalidSeats, Boolean invalidCancellation) {
         Show show = new Show();
         show.setShowId(200L);
@@ -108,7 +125,7 @@ public class BookTicketServiceValidatorTest {
     private Buyer getMockBuyer() {
         Buyer buyer = new Buyer();
         buyer.setBookingTime(LocalDateTime.now());
-        buyer.setBuyerPhoneNumber(8231);
+        buyer.setBuyerPhoneNumber(81234567);
         buyer.setSeatNumber("A1");
         buyer.setTicketId(1L);
         buyer.setShowId(200L);
@@ -117,7 +134,7 @@ public class BookTicketServiceValidatorTest {
 
     private BuyerDTO getMockBuyerDTO() {
         BuyerDTO buyer = new BuyerDTO();
-        buyer.setBuyerPhoneNumber(8231);
+        buyer.setBuyerPhoneNumber(81234567);
         buyer.setSeatNumberList("A1, A2");
         buyer.setTicketId(1L);
         buyer.setShowId(200L);
